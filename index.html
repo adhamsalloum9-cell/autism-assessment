@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تقييم التوحد واضطراب التواصل الاجتماعي | Adham Salloum</title>
+<title>تقييم التوحد (M-CHAT-R/F + DSM-5) | Adham Salloum</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
@@ -51,14 +51,14 @@
 <body>
 <div class="container">
   <header>
-    <h1>تقييم اضطراب طيف التوحد واضطراب التواصل الاجتماعي</h1>
-    <p>وفقاً لمعايير DSM-5 ومقياس ASHA</p>
+    <h1>تقييم اضطراب طيف التوحد (M-CHAT-R/F + DSM-5)</h1>
+    <p>وفقاً للمعايير العالمية</p>
     <p>إعداد: أخصائي تقويم كلام ولغة Adham Salloum</p>
   </header>
 
   <div class="tabs no-print">
     <button class="tab-btn active" onclick="openTab('tab-data')">1. البيانات</button>
-    <button class="tab-btn" onclick="openTab('tab-screening')">2. الفحص المبكر</button>
+    <button class="tab-btn" onclick="openTab('tab-screening')">2. الفحص المبكر (M-CHAT)</button>
     <button class="tab-btn" onclick="openTab('tab-dsm')">3. المعايير التشخيصية</button>
     <button class="tab-btn" onclick="openTab('tab-asha')">4. المعالم التواصلية</button>
     <button class="tab-btn" onclick="openTab('tab-report')">5. التقرير النهائي</button>
@@ -72,7 +72,7 @@
         <div><label>اسم المستفيد:</label><input type="text" id="childName" placeholder="..."></div>
         <div><label>تاريخ الميلاد:</label><input type="date" id="dob" onchange="calculateAge()"></div>
         <div><label>تاريخ التقييم:</label><input type="date" id="evalDate" onchange="calculateAge()"></div>
-        <div><label>العمر الزمني (تلقائي):</label><input type="text" id="ageDisplay" readonly placeholder="سيظهر هنا..."></div>
+        <div><label>العمر الزمني (تلقائي):</label><input type="text" id="ageDisplay" readonly placeholder="..."></div>
         <div><label>اسم الأخصائي:</label><input type="text" id="therapist" value="Adham Salloum"></div>
       </div>
     </div>
@@ -81,8 +81,8 @@
   <!-- 2. الفحص المبكر -->
   <div id="tab-screening" class="tab-content">
     <div class="card">
-      <h2>استمارة الفحص المبكر للتواصل الاجتماعي</h2>
-      <p style="font-size:13px; color:#666; margin-bottom:15px;">يرجى الإجابة عن الأسئلة التالية بناءً على سلوك الطفل المعتاد.</p>
+      <h2>استمارة الفحص المبكر (M-CHAT-R/F)</h2>
+      <p style="font-size:13px; color:#666; margin-bottom:15px;">يرجى الإجابة عن الأسئلة التالية بناءً على سلوك الطفل المعتاد. (ملاحظة: بعض الأسئلة تعكس الإجابة الإيجابية).</p>
       <div id="screeningQuestions"></div>
     </div>
   </div>
@@ -119,27 +119,29 @@
 // ================= المتغيرات =================
 let childAgeInYears = 0;
 
+// أسئلة M-CHAT-R/F (مترجمة)
+// ملاحظة: في M-CHAT، الإجابة "لا" في معظم الأسئلة تعني "خطر". في الكود، سنعكس القيمة لتسهيل الحساب.
 const screeningData = [
-  "هل يستجيب طفلك لك عند مناداته باسمه؟",
-  "هل يفهم طفلك ما يقوله الآخرون؟",
-  "عندما تبتسم لطفلك، هل يبتسم لك؟",
-  "هل يقلد طفلك تعابير الوجه؟",
-  "هل يحافظ طفلك على التواصل البصري معك أثناء التفاعل؟",
-  "هل يستمتع طفلك بلعب الغميضة؟",
-  "هل يشارك طفلك في اللعب التخيلي (مثل العناية بالدمية أو الطبخ)؟",
-  "هل يستمتع طفلك بأنواع مختلفة من أنشطة اللعب؟",
-  "هل يستخدم طفلك الإيماءات للتواصل (مثل التلويح أو الإشارة)؟",
-  "هل يبدو أن طفلك يفهم الإيماءات التي يستخدمها الآخرون؟",
-  "هل يستمتع طفلك بالعناق معك؟",
-  "هل يبادلك طفلك المودة (مثل العناق والقبلات)؟",
-  "هل يكرر طفلك الأفعال التي تضحك الآخرين؟",
-  "هل يبدو أن طفلك يستمتع باللعب مع أطفال آخرين؟",
-  "هل يجلب طفلك الألعاب أو الأشياء ليريها لك؟",
-  "هل يستمتع طفلك بالنظر إلى الكتب المصورة معك؟",
-  "هل يستخدم طفلك الألعاب بشكل مناسب (مثل تمشيط شعر الدمية)؟",
-  "هل ينظر طفلك إليك ليتحقق من رد فعلك في المواقف غير المألوفة؟",
-  "هل تعتقد أن طفلك يمتلك خيالاً نشطاً؟",
-  "هل يظهر طفلك سلوكيات تأرجح غير معتادة؟"
+  { q: "إذا أشرت إلى شيء في الغرفة، هل ينظر إليه طفلك؟", correct: "yes" },
+  { q: "هل تساءلت يوماً إذا كان طفلك أصم؟", correct: "no" },
+  { q: "هل يستخدم طفلك خياله (مثلاً: يتظاهر بأنه يشرب من كوب فارغ)؟", correct: "yes" },
+  { q: "هل يحب طفلك التسلق على الأشياء؟", correct: "yes" },
+  { q: "هل يقوم طفلك بحركات غريبة بأصابعه (مثل تحريك الأصابع أمام عينيه)؟", correct: "no" },
+  { q: "هل يشير طفلك بإصبعه لطلب شيء أو لطلب المساعدة؟", correct: "yes" },
+  { q: "هل يشير طفلك بإصبعه ليريك شيئاً مثيراً للاهتمام؟", correct: "yes" },
+  { q: "هل يلعب طفلك بشكل مناسب مع الألعاب الصغيرة (مثل تحريك السيارات أو بناء المكعبات) دون وضعها في فمه أو رميها؟", correct: "yes" },
+  { q: "هل يجلب طفلك الأشياء ليريها لك؟", correct: "yes" },
+  { q: "هل ينظر طفلك إليك في عينيك لأكثر من ثانية أو ثانيتين؟", correct: "yes" },
+  { q: "هل يظهر طفلك حساسية غير معتادة للأصوات (مثلاً: يغطي أذنيه)؟", correct: "no" },
+  { q: "هل يبتسم طفلك رداً على وجهك أو ابتسامتك؟", correct: "yes" },
+  { q: "هل يقلد طفلك حركاتك (مثل التلويح بيدك)؟", correct: "yes" },
+  { q: "هل يستجيب طفلك لاسمه عند مناداته؟", correct: "yes" },
+  { q: "إذا أشرت إلى لعبة في الغرفة، هل ينظر إليها طفلك؟", correct: "yes" },
+  { q: "هل يمشي طفلك؟", correct: "yes" },
+  { q: "هل ينظر طفلك إلى الأشياء التي تنظر إليها؟", correct: "yes" },
+  { q: "هل يقوم طفلك بحركات متكررة بيديه بجانب وجهه؟", correct: "no" },
+  { q: "هل يحاول طفلك جذب انتباهك إلى نفسه؟", correct: "yes" },
+  { q: "هل تساءلت يوماً إذا كان طفلك لديه مشكلة في السمع؟", correct: "no" }
 ];
 
 const dsmData = {
@@ -195,8 +197,8 @@ function openTab(tabId) {
 function generateScreening() {
   const c = document.getElementById('screeningQuestions');
   c.innerHTML = '';
-  screeningData.forEach((q, i) => {
-    c.innerHTML += `<div class="question-item"><div class="question-text">${i+1}. ${q}</div><div class="radio-group"><label><input type="radio" name="scr_${i}" value="1"> نعم</label><label><input type="radio" name="scr_${i}" value="0"> لا</label></div></div>`;
+  screeningData.forEach((item, i) => {
+    c.innerHTML += `<div class="question-item"><div class="question-text">${i+1}. ${item.q}</div><div class="radio-group"><label><input type="radio" name="scr_${i}" value="1"> نعم</label><label><input type="radio" name="scr_${i}" value="0"> لا</label></div></div>`;
   });
 }
 
@@ -241,13 +243,18 @@ function generateReport() {
   const name = document.getElementById('childName').value || 'غير محدد';
   const ageDisplay = document.getElementById('ageDisplay').value || 'غير محدد';
   
-  // حساب الفحص المبكر
-  let scrScore = 0, scrTotal = screeningData.length;
-  screeningData.forEach((_, i) => {
+  // حساب M-CHAT
+  let riskScore = 0;
+  screeningData.forEach((item, i) => {
     const sel = document.querySelector(`input[name="scr_${i}"]:checked`);
-    if (sel && sel.value === '1') scrScore++;
+    if (sel) {
+      const answer = sel.value;
+      // إذا كانت الإجابة لا تتوافق مع الإجابة الصحيحة، فهذه علامة خطر
+      if ((item.correct === 'yes' && answer === '0') || (item.correct === 'no' && answer === '1')) {
+        riskScore++;
+      }
+    }
   });
-  const scrPercent = (scrScore / scrTotal) * 100;
 
   // حساب DSM-5
   let socialScore = 0, socialTotal = 0;
@@ -266,17 +273,17 @@ function generateReport() {
   // التشخيص المبدئي
   let diagnosis = "", recommendation = "", color = "";
   
-  if (socialScore >= 2 && behaviorScore >= 2) {
+  if (riskScore >= 3 || (socialScore >= 2 && behaviorScore >= 2)) {
     diagnosis = "احتمالية عالية لاضطراب طيف التوحد (ASD)";
-    recommendation = "يوصى بإحالة فورية لتقييم تشخيصي متعدد التخصصات (طبيب أعصاب / نفسي)، مع بدء التدخل السلوكي المكثف (ABA) بعد التشخيص.";
+    recommendation = "نتيجة M-CHAT تشير إلى خطر متوسط إلى عالي. يوصى بإحالة فورية لتقييم تشخيصي متعدد التخصصات (ADOS-2)، مع بدء التدخل السلوكي المكثف (ABA) بعد التشخيص.";
     color = "#dc2626";
-  } else if (socialScore >= 2 && behaviorScore < 2) {
+  } else if (riskScore === 2) {
+    diagnosis = "احتمالية متوسطة لاضطراب طيف التوحد";
+    recommendation = "نتيجة M-CHAT تشير إلى خطر متوسط. يوصى بإجراء مقابلة متابعة (Follow-up) مع الأهل، ومراقبة السلوكيات، وإعادة التقييم بعد شهر.";
+    color = "#f59e0b";
+  } else if (riskScore < 2 && socialScore >= 2) {
     diagnosis = "احتمالية اضطراب التواصل الاجتماعي (SCD)";
     recommendation = "يوصى بتقييم متخصص للتواصل الاجتماعي، مع تدريب مهارات البرجماتية والتفاعل الاجتماعي.";
-    color = "#f59e0b";
-  } else if (scrPercent < 50) {
-    diagnosis = "تأخر في المهارات التواصلية";
-    recommendation = "يوصى بإجراء تقييم لغوي شامل (مثل نظام التقييم الشامل)، مع مراقبة النمو.";
     color = "#3b82f6";
   } else {
     diagnosis = "نمو تواصلي ضمن الحدود الطبيعية";
@@ -295,7 +302,7 @@ function generateReport() {
       <h3 style="color:#0f766e; border-bottom:1px solid #ccc; padding-bottom:5px; margin-top:20px;">2. ملخص النتائج</h3>
       <table style="width:100%; border-collapse:collapse; margin-top:10px;">
         <tr style="background:#f0fdfa;"><th style="border:1px solid #ccc; padding:8px;">المجال</th><th style="border:1px solid #ccc; padding:8px;">النتيجة</th></tr>
-        <tr><td style="border:1px solid #ccc; padding:8px;">الفحص المبكر (استجابات إيجابية)</td><td style="border:1px solid #ccc; padding:8px; text-align:center;">${scrScore} من ${scrTotal} (${scrPercent.toFixed(1)}%)</td></tr>
+        <tr><td style="border:1px solid #ccc; padding:8px;">M-CHAT-R/F (علامات الخطر)</td><td style="border:1px solid #ccc; padding:8px; text-align:center;">${riskScore} من 20</td></tr>
         <tr><td style="border:1px solid #ccc; padding:8px;">عجز التواصل الاجتماعي (DSM-5)</td><td style="border:1px solid #ccc; padding:8px; text-align:center;">${socialScore} من ${socialTotal}</td></tr>
         <tr><td style="border:1px solid #ccc; padding:8px;">السلوكيات النمطية (DSM-5)</td><td style="border:1px solid #ccc; padding:8px; text-align:center;">${behaviorScore} من ${behaviorTotal}</td></tr>
       </table>
