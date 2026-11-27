@@ -82,7 +82,7 @@
   <div id="tab-screening" class="tab-content">
     <div class="card">
       <h2>استمارة الفحص المبكر (M-CHAT-R/F)</h2>
-      <p style="font-size:13px; color:#666; margin-bottom:15px;">يرجى الإجابة عن الأسئلة التالية بناءً على سلوك الطفل المعتاد. (ملاحظة: بعض الأسئلة تعكس الإجابة الإيجابية).</p>
+      <p style="font-size:13px; color:#666; margin-bottom:15px;">يرجى الإجابة عن الأسئلة التالية بناءً على سلوك الطفل المعتاد.</p>
       <div id="screeningQuestions"></div>
     </div>
   </div>
@@ -119,8 +119,6 @@
 // ================= المتغيرات =================
 let childAgeInYears = 0;
 
-// أسئلة M-CHAT-R/F (مترجمة)
-// ملاحظة: في M-CHAT، الإجابة "لا" في معظم الأسئلة تعني "خطر". في الكود، سنعكس القيمة لتسهيل الحساب.
 const screeningData = [
   { q: "إذا أشرت إلى شيء في الغرفة، هل ينظر إليه طفلك؟", correct: "yes" },
   { q: "هل تساءلت يوماً إذا كان طفلك أصم؟", correct: "no" },
@@ -240,6 +238,30 @@ function generateASHA() {
 }
 
 function generateReport() {
+  // التحقق من الإجابة على أسئلة M-CHAT
+  let unansweredScreening = false;
+  screeningData.forEach((_, i) => {
+    if (!document.querySelector(`input[name="scr_${i}"]:checked`)) {
+      unansweredScreening = true;
+    }
+  });
+
+  // التحقق من الإجابة على أسئلة DSM-5
+  let unansweredDSM = false;
+  for (const [cat, questions] of Object.entries(dsmData)) {
+    questions.forEach((_, i) => {
+      const fieldName = `dsm_${cat.replace(/\s/g, '')}_${i}`;
+      if (!document.querySelector(`input[name="${fieldName}"]:checked`)) {
+        unansweredDSM = true;
+      }
+    });
+  }
+
+  if (unansweredScreening || unansweredDSM) {
+    alert('يرجى الإجابة على جميع أسئلة الفحص المبكر (M-CHAT) والمعايير التشخيصية (DSM-5) أولاً للحصول على تقرير دقيق.');
+    return;
+  }
+
   const name = document.getElementById('childName').value || 'غير محدد';
   const ageDisplay = document.getElementById('ageDisplay').value || 'غير محدد';
   
@@ -249,7 +271,6 @@ function generateReport() {
     const sel = document.querySelector(`input[name="scr_${i}"]:checked`);
     if (sel) {
       const answer = sel.value;
-      // إذا كانت الإجابة لا تتوافق مع الإجابة الصحيحة، فهذه علامة خطر
       if ((item.correct === 'yes' && answer === '0') || (item.correct === 'no' && answer === '1')) {
         riskScore++;
       }
